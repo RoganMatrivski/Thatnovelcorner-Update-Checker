@@ -1,0 +1,5 @@
+{
+  "timeout": 60000,
+  "postsFilename": "posts.json",
+  "getPageCount": 10
+}
