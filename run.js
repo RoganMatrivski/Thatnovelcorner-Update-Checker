@@ -8,18 +8,11 @@ const _ = require('lodash');
 const opn = require('open'); // TODO: Rename the 'opn' APIs to 'open'
 const fs = require('fs');
 
-const configuration = lib.loadData('config.json');
-
 var firstRun = false;
 
+const configuration = lib.loadData('config.json');
+
 (async () => {
-  if (!fs.existsSync('config.json')) {
-    console.log('It seems like config.json is missing. Generating a new one.');
-
-    config.generateNewOne();
-    console.log();
-  }
-
   if (!fs.existsSync(configuration.postsFilename)) {
     firstRun = true;
     console.log('It seems like ' + configuration.postsFilename + ' is missing. Generating a new one.');

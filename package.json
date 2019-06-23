@@ -4,6 +4,12 @@
   "description": "A program that will checks for an update for thatnovelcorner.com.",
   "main": "run.js",
   "bin": "run.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RoganMatrivski/Thatnovelcorner-Update-Checker.git"
+  },
+  "bugs": "https://github.com/RoganMatrivski/Thatnovelcorner-Update-Checker/issues",
+  "email": "roganmatrivski@gmail.com",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

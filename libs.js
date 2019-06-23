@@ -22,6 +22,23 @@ exports.loadData = (path) => {
   }
 };
 
+const generateNewOne = () => {
+  this.storeData(
+    {
+      timeout: 60000,
+      postsFilename: 'posts.json',
+      getPageCount: 10
+    }, 'config.json');
+};
+
+// TODO: Move this to config.js.
+if (!fs.existsSync('config.json')) {
+  console.log('It seems like config.json is missing. Generating a new one.');
+
+  generateNewOne();
+  console.log();
+}
+
 const configuration = this.loadData('config.json');
 
 const spinner = ora();
