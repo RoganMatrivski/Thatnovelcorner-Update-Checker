@@ -1,13 +1,11 @@
-/* jshint esversion: 8 */
-/* jshint node: true */
-
 'use strict';
 
 const inquirer = require('inquirer');
+const config = require('./config');
 const chalk = require('chalk');
 const lib = require('./libs');
 const _ = require('lodash');
-const opn = require('opn');
+const opn = require('open'); // TODO: Rename the 'opn' APIs to 'open'
 const fs = require('fs');
 
 const configuration = lib.loadData('config.json');
@@ -15,6 +13,13 @@ const configuration = lib.loadData('config.json');
 var firstRun = false;
 
 (async () => {
+  if (!fs.existsSync('config.json')) {
+    console.log('It seems like config.json is missing. Generating a new one.');
+
+    config.generateNewOne();
+    console.log();
+  }
+
   if (!fs.existsSync(configuration.postsFilename)) {
     firstRun = true;
     console.log('It seems like ' + configuration.postsFilename + ' is missing. Generating a new one.');
@@ -41,6 +46,7 @@ var firstRun = false;
     return -1;
   }
 
+  // TODO: Move the entire process of updating the posts collection to lib.js
   const diffs = await lib.checkForNewPosts(firstPagePosts);
 
   const updatedAllPosts = lib.loadData(configuration.postsFilename);
@@ -67,14 +73,18 @@ var firstRun = false;
       message: 'What do you want to do?',
       choices: [
         'Open to Browser',
+        'Change Configuration File',
         'Finish'
       ]
     });
 
-  if (actionAnswer.action === 'Finish') {
-    console.log('Goodbye!');
-
-    return 0;
+  switch (actionAnswer.action) {
+    case 'Finish':
+      console.log('Goodbye!');
+      return 0;
+    case 'Change Configuration File':
+      await config.changeConfiguration();
+      console.log('Goodbye!'); // TODO: Make this go to the beginning after changing configuration.
   }
 
   let openAgainAnswer = false;
@@ -102,7 +112,7 @@ var firstRun = false;
         choices: [ 'Yes', 'No' ],
         default: 'No',
         filter: (input) => {
-          if (input === 'Yes') {
+          if (input === 'Yes') { // TODO: Change this to 'switch'
             return true;
           } else if (input === 'No') {
             return false;

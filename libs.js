@@ -1,5 +1,3 @@
-/* jshint esversion: 8 */
-
 const beautify = require('json-beautify');
 const cheerio = require('cheerio');
 const axios = require('axios');
@@ -93,10 +91,11 @@ exports.getFirstPagePosts = async () => {
 
   let response;
 
+  // TODO: Add another common exceptions user might ecounter and add a troubleshoot message.
   try {
     response = await instance.get('/', { params: { 'infinity': 'scrolling', 'page': 1 } });
   } catch (ex) {
-    if (ex.code === 'ECONNABORTED') {
+    if (ex.code === 'ECONNABORTED') { // TODO: Change this to 'switch'
       spinner.fail(ex.toString() + '\nPlease try again. If error persists, try increasing the timeout in config.json and then try again.');
     } else {
       spinner.fail(ex.toString());

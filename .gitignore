@@ -59,3 +59,10 @@ typings/
 
 # next.js build output
 .next
+
+# program generated files
+posts.json
+config.json
+
+# build generated files
+build/

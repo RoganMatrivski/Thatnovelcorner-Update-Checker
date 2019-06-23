@@ -1,6 +1,3 @@
-/* jshint esversion: 8 */
-/* jshint node: true */
-
 'use strict';
 
 const sanitize = require('sanitize-filename');
@@ -41,7 +38,16 @@ const questions =
   }
 ];
 
-(async () => {
+exports.generateNewOne = () => {
+  lib.storeData(
+    {
+      timeout: 60000,
+      postsFilename: 'posts.json',
+      getPageCount: 10
+    }, 'config.json');
+};
+
+exports.changeConfiguration = async () => {
   const JSONData = await inquirer.prompt(questions);
   lib.storeData(JSONData, 'config.json');
-})();
+};
