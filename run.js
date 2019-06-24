@@ -5,7 +5,7 @@ const config = require('./config');
 const chalk = require('chalk');
 const lib = require('./libs');
 const _ = require('lodash');
-const opn = require('open'); // TODO: Rename the 'opn' APIs to 'open'
+const opn = require('opn');
 const fs = require('fs');
 
 var firstRun = false;
@@ -27,7 +27,6 @@ const configuration = lib.loadData('config.json');
     }
 
     lib.storeData(allPosts, configuration.postsFilename);
-    console.log();
   }
 
   let firstPagePosts;
@@ -76,8 +75,9 @@ const configuration = lib.loadData('config.json');
       console.log('Goodbye!');
       return 0;
     case 'Change Configuration File':
-      await config.changeConfiguration();
+      await config.changeConfiguration(); // TODO: Add a mark if configuration is changed to force regenerate`
       console.log('Goodbye!'); // TODO: Make this go to the beginning after changing configuration.
+      return 0;
   }
 
   let openAgainAnswer = false;
