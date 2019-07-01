@@ -50,8 +50,7 @@ const instance = axios.create({
 
 exports.parseHTML = (htmlstring) => {
   spinner.text = 'Parsing HTML';
-  let cleaned = htmlstring.replace(/\n/g, '').replace(/\s{2,}/g, '');
-  const $ = cheerio.load(cleaned);
+  const $ = cheerio.load(htmlstring);
 
   let posts = [];
 
@@ -74,7 +73,7 @@ exports.getAllPosts = async () => {
   let postRequests = [];
 
   for (let i = 0; i < 5; i++) {
-    postRequests.push(instance.get('/', { params: { 'infinity': 'scrolling', 'page': i + 1 } }));
+    postRequests.push(instance.get(`/page/${i + 1}`));
   }
 
   let responses;
@@ -93,7 +92,7 @@ exports.getAllPosts = async () => {
   let parsedResponses = [];
 
   for (let response of responses) {
-    parsedResponses.push(this.parseHTML(response.data.html));
+    parsedResponses.push(this.parseHTML(response.data));
   }
 
   const cleanedParsedResponses = _.remove(_.flattenDeep(parsedResponses), (post) => !_.isNaN(post.timestamp));
@@ -110,7 +109,7 @@ exports.getFirstPagePosts = async () => {
 
   // TODO: Add another common exceptions user might ecounter and add a troubleshoot message.
   try {
-    response = await instance.get('/', { params: { 'infinity': 'scrolling', 'page': 1 } });
+    response = await instance.get('/page/1/');
   } catch (ex) {
     if (ex.code === 'ECONNABORTED') { // TODO: Change this to 'switch'
       spinner.fail(ex.toString() + '\nPlease try again. If error persists, try increasing the timeout in config.json and then try again.');
@@ -120,7 +119,7 @@ exports.getFirstPagePosts = async () => {
     throw ex;
   }
 
-  return _.remove(this.parseHTML(response.data.html), (post) => !_.isNaN(post.timestamp));
+  return _.remove(this.parseHTML(response.data), (post) => !_.isNaN(post.timestamp));
 };
 
 exports.checkForNewPosts = async (firstPagePosts) => {
