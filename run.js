@@ -5,12 +5,15 @@ const config = require('./config');
 const chalk = require('chalk');
 const lib = require('./libs');
 const _ = require('lodash');
+const path = require('path');
 const opn = require('opn');
 const fs = require('fs');
 
 var firstRun = false;
 
-const configuration = lib.loadData('config.json');
+const configuration = lib.loadData(path.join(__dirname, 'config.json'));
+
+configuration.postsFilename = path.join(__dirname, configuration.postsFilename);
 
 (async () => {
   if (!fs.existsSync(configuration.postsFilename)) {
